@@ -1,11 +1,38 @@
+function advancedShuffle(range) {
+  let unusedIndexMin = 0;
+  let unusedIndexMax = range - 1;
+  const outputIndex = new Array(range);
+  for (i = 0; i < range; i++) {
+    let rand;
+    // let debugCounter = 0;
+    do {
+      // debugCounter++;
+      rand = Math.floor(
+        Math.random() * (unusedIndexMax - unusedIndexMin + 1) + unusedIndexMin
+      );
+    } while (outputIndex.includes(rand));
+    outputIndex[i] = rand;
+    if (rand === unusedIndexMin) {
+      unusedIndexMin++;
+    }
+    if (rand === unusedIndexMax) {
+      unusedIndexMax--;
+    }
+    // console.log(rand, debugCounter);
+  }
+  return outputIndex;
+}
+
 async function getPictureList(doMix) {
   return new Promise((resolve, reject) => {
-    const arrayClone = pictureSources.slice();
+    let arrayClone = pictureSources.slice();
     if (doMix) {
-      //TODO: come up with a better shuffle algorithm
-      for (let i = 0; i < 2; i++) {
-        arrayClone.sort((a, b) => 1 - Math.round(Math.random() * 2));
-      }
+      // for (let i = 0; i < 2; i++) {
+      //   arrayClone.sort((a, b) => 1 - Math.round(Math.random() * 2));
+      // }
+      arrayClone = advancedShuffle(arrayClone.length).map(
+        (val) => arrayClone[val]
+      );
     }
     resolve(arrayClone);
   });
