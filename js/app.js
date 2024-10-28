@@ -1,54 +1,56 @@
 function advancedShuffle(range, logDetails) {
-  let unusedIndexMin = 0;
-  let unusedIndexMax = range - 1;
   const outputIndex = new Set();
   let totalCounter = 0;
-  for (i = 0; i < range; i++) {
-    let rand;
-    let debugCounter = 0;
-    do {
-      debugCounter++;
-      rand = Math.floor(
-        Math.random() * (unusedIndexMax - unusedIndexMin + 1) + unusedIndexMin
-      );
-    } while (outputIndex.has(rand));
-    totalCounter += debugCounter;
-    outputIndex.add(rand);
-    let edgeLookupCounter = 0;
-    if (rand === unusedIndexMin) {
+  const getRandomInt = (fromInc, toInc) =>
+    Math.floor(Math.random() * (toInc - fromInc + 1) + fromInc);
+  const fillSection = (fromInc, toInc, output) => {
+    let unusedIndexMin = fromInc;
+    let unusedIndexMax = toInc;
+    for (i = fromInc; i < toInc; i++) {
+      let rand;
+      let debugCounter = 0;
       do {
-        edgeLookupCounter++;
-        unusedIndexMin++;
-      } while (
-        unusedIndexMin < unusedIndexMax &&
-        outputIndex.has(unusedIndexMin)
-      );
+        debugCounter++;
+        rand = getRandomInt(unusedIndexMin, unusedIndexMax);
+      } while (output.has(rand));
+      totalCounter += debugCounter;
+      output.add(rand);
+      let edgeLookupCounter = 0;
+      if (rand === unusedIndexMin) {
+        do {
+          edgeLookupCounter++;
+          unusedIndexMin++;
+        } while (unusedIndexMin < unusedIndexMax && output.has(unusedIndexMin));
+      }
+      if (rand === unusedIndexMax) {
+        do {
+          edgeLookupCounter++;
+          unusedIndexMax--;
+        } while (unusedIndexMax > unusedIndexMin && output.has(unusedIndexMax));
+      }
+      if (logDetails) {
+        console.log(
+          `${rand.toString().padStart(2)} ${unusedIndexMin
+            .toString()
+            .padStart(2)}..${unusedIndexMax
+            .toString()
+            .padStart(2, '.')} [${edgeLookupCounter
+            .toString()
+            .padStart(2)}] ${debugCounter.toString().padStart(3)} ${'█'.repeat(
+            Math.min(debugCounter, 240)
+          )}`
+        );
+      }
     }
-    if (rand === unusedIndexMax) {
-      do {
-        edgeLookupCounter++;
-        unusedIndexMax--;
-      } while (
-        unusedIndexMax > unusedIndexMin &&
-        outputIndex.has(unusedIndexMax)
-      );
-    }
-    if (logDetails) {
-      console.log(
-        `${rand.toString().padStart(2)} ${unusedIndexMin
-          .toString()
-          .padStart(2)}..${unusedIndexMax
-          .toString()
-          .padStart(2, '.')} [${edgeLookupCounter
-          .toString()
-          .padStart(2)}] ${debugCounter.toString().padStart(3)} ${'█'.repeat(
-          Math.min(debugCounter, 240)
-        )}`
-      );
-    }
-  }
+  };
+  //starts to smell like recursion...
+  const splitPoint = getRandomInt(0, range);
+  outputIndex.add(splitPoint);
+  fillSection(0, splitPoint, outputIndex);
+  fillSection(splitPoint + 1, range, outputIndex);
+
   if (logDetails) {
-    console.log((' ' + totalCounter.toString()).padStart(13) + ' -------');
+    console.log((' ' + totalCounter.toString()).padStart(18, '-'));
   }
   return Array.from(outputIndex.values());
 }
