@@ -1,16 +1,30 @@
-function advancedShuffle(range) {
+function advancedShuffle(range, logDetails) {
   let unusedIndexMin = 0;
   let unusedIndexMax = range - 1;
   const outputIndex = new Array(range);
+  let totalCounter = 0;
   for (i = 0; i < range; i++) {
     let rand;
-    // let debugCounter = 0;
+    let debugCounter = 0;
     do {
-      // debugCounter++;
+      debugCounter++;
       rand = Math.floor(
         Math.random() * (unusedIndexMax - unusedIndexMin + 1) + unusedIndexMin
       );
     } while (outputIndex.includes(rand));
+    if (logDetails) {
+      console.log(
+        `${rand.toString().padStart(2)} ${unusedIndexMin
+          .toString()
+          .padStart(2)}..${unusedIndexMax
+          .toString()
+          .padStart(2, '.')} ${debugCounter
+          .toString()
+          .padStart(3)} ${'█'.repeat(Math.min(debugCounter, 255))}`
+      );
+    }
+
+    totalCounter += debugCounter;
     outputIndex[i] = rand;
     if (rand === unusedIndexMin) {
       unusedIndexMin++;
@@ -18,7 +32,9 @@ function advancedShuffle(range) {
     if (rand === unusedIndexMax) {
       unusedIndexMax--;
     }
-    // console.log(rand, debugCounter);
+  }
+  if (logDetails) {
+    console.log((' ' + totalCounter.toString()).padStart(13) + ' -------');
   }
   return outputIndex;
 }
@@ -99,5 +115,5 @@ document.querySelector('#button-show').addEventListener('click', async (e) => {
 
 document.querySelector('#button-mix').addEventListener('click', async (e) => {
   const num = galleryElement.querySelectorAll('img').length;
-  shuffleRenderedImages(await advancedShuffle(num));
+  shuffleRenderedImages(await advancedShuffle(num, e.ctrlKey));
 });
