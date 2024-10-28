@@ -48,6 +48,20 @@ function renderImage(source, dstElement) {
   dstElement.appendChild(imgElement);
 }
 
+/**
+ * a primitive implementation of non-standard https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded
+ * @param {*} element
+ */
+function scrollIntoViewIfNeeded(element) {
+  const viewport = window.visualViewport;
+  if (
+    element.getBoundingClientRect()['bottom'] >
+    viewport.offsetTop + viewport.height
+  ) {
+    element.scrollIntoView(false);
+  }
+}
+
 async function placeAllImages(sources, dstElement) {
   return new Promise((resolve, reject) => {
     //1. clear DOM content
@@ -59,13 +73,14 @@ async function placeAllImages(sources, dstElement) {
       renderImage(`assets/pictures/${src}`, dstElement);
     }
     //3. assign events to images
-    dstElement
-      .querySelectorAll('img')
-      .forEach((el) =>
-        el.addEventListener('dblclick', (e) =>
-          e.target.classList.toggle('enlarged')
-        )
-      );
+    dstElement.querySelectorAll('img').forEach((el) =>
+      el.addEventListener('dblclick', (e) => {
+        e.target.classList.toggle('enlarged');
+        setTimeout(() => {
+          scrollIntoViewIfNeeded(e.target);
+        }, 100);
+      })
+    );
     resolve();
   });
 }
