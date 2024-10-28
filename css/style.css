@@ -1,0 +1,94 @@
+* {
+  box-sizing: border-box;
+}
+
+.interactive, #jumpToTop, #control-panel button {
+  min-height: 40px;
+  min-width: 40px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 200ms;
+  border: none;
+  color: #fff;
+  background-color: #689;
+}
+.interactive:hover, #jumpToTop:hover, #control-panel button:hover {
+  background-color: #8ab;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #333;
+  color: #fff;
+}
+body > .container {
+  max-width: 1200px;
+  padding: 1em 2em;
+  margin: 0 auto;
+}
+
+#control-panel {
+  padding: 1em;
+  gap: 1em;
+  display: flex;
+  align-items: center;
+}
+#control-panel button {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.75em 1.25em;
+  border: none;
+  border-radius: 1.25em;
+}
+
+#gallery {
+  display: grid;
+  grid-auto-flow: dense;
+  grid-template-columns: repeat(auto-fit, minmax(240px, auto));
+  width: 100%;
+  justify-items: stretch;
+  justify-content: stretch;
+  gap: 0.5em;
+  transition: 200ms;
+}
+#gallery img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  grid-column: span 1;
+  min-width: 240px;
+  max-width: 480px;
+  object-fit: cover;
+  transition: 200ms;
+}
+#gallery img.enlarged {
+  grid-column: span 2;
+  grid-row: span 2;
+  max-width: 960px;
+}
+
+#jumpToTop {
+  font-size: 3rem;
+  line-height: 1;
+  padding: 0.5rem;
+  border-radius: 2rem;
+  min-height: 4rem;
+  min-width: 4rem;
+  padding-left: 0.375em;
+  padding-right: 0.125em;
+  transform: rotate(90deg);
+  display: block;
+  position: fixed;
+  bottom: 0.5em;
+  right: 0.5em;
+  text-decoration: none;
+  box-shadow: 0 2px 16px 0 rgba(34, 34, 34, 0.6);
+  opacity: 0.5;
+}
+#jumpToTop:hover {
+  opacity: 1;
+}
+
+/*# sourceMappingURL=style.css.map */
