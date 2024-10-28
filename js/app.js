@@ -44,7 +44,7 @@ function renderImage(source, dstElement) {
   imgElement.title = source.slice(
     source.indexOf('Photo_20') + 6,
     source.indexOf('.jpg') - 7
-  ).sp;
+  );
   dstElement.appendChild(imgElement);
 }
 
