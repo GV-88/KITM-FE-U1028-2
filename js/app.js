@@ -1,7 +1,7 @@
 function advancedShuffle(range, logDetails) {
   let unusedIndexMin = 0;
   let unusedIndexMax = range - 1;
-  const outputIndex = new Array(range);
+  const outputIndex = new Set();
   let totalCounter = 0;
   for (i = 0; i < range; i++) {
     let rand;
@@ -11,32 +11,46 @@ function advancedShuffle(range, logDetails) {
       rand = Math.floor(
         Math.random() * (unusedIndexMax - unusedIndexMin + 1) + unusedIndexMin
       );
-    } while (outputIndex.includes(rand));
+    } while (outputIndex.has(rand));
+    totalCounter += debugCounter;
+    outputIndex.add(rand);
+    let edgeLookupCounter = 0;
+    if (rand === unusedIndexMin) {
+      do {
+        edgeLookupCounter++;
+        unusedIndexMin++;
+      } while (
+        unusedIndexMin < unusedIndexMax &&
+        outputIndex.has(unusedIndexMin)
+      );
+    }
+    if (rand === unusedIndexMax) {
+      do {
+        edgeLookupCounter++;
+        unusedIndexMax--;
+      } while (
+        unusedIndexMax > unusedIndexMin &&
+        outputIndex.has(unusedIndexMax)
+      );
+    }
     if (logDetails) {
       console.log(
         `${rand.toString().padStart(2)} ${unusedIndexMin
           .toString()
           .padStart(2)}..${unusedIndexMax
           .toString()
-          .padStart(2, '.')} ${debugCounter
+          .padStart(2, '.')} [${edgeLookupCounter
           .toString()
-          .padStart(3)} ${'█'.repeat(Math.min(debugCounter, 255))}`
+          .padStart(2)}] ${debugCounter.toString().padStart(3)} ${'█'.repeat(
+          Math.min(debugCounter, 240)
+        )}`
       );
-    }
-
-    totalCounter += debugCounter;
-    outputIndex[i] = rand;
-    if (rand === unusedIndexMin) {
-      unusedIndexMin++;
-    }
-    if (rand === unusedIndexMax) {
-      unusedIndexMax--;
     }
   }
   if (logDetails) {
     console.log((' ' + totalCounter.toString()).padStart(13) + ' -------');
   }
-  return outputIndex;
+  return Array.from(outputIndex.values());
 }
 
 async function getPictureList(doMix) {
