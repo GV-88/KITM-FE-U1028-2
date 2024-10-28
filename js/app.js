@@ -48,6 +48,12 @@ function renderImage(source, dstElement) {
   dstElement.appendChild(imgElement);
 }
 
+function shuffleRenderedImages(mixOrder) {
+  document
+    .querySelectorAll('#gallery img')
+    .forEach((el, i) => (el.style.order = mixOrder[i]));
+}
+
 /**
  * a primitive implementation of non-standard https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded
  * @param {*} element
@@ -87,11 +93,11 @@ async function placeAllImages(sources, dstElement) {
 
 const galleryElement = document.querySelector('#gallery');
 
-document.querySelectorAll('#button-show, #button-mix').forEach((el) =>
-  el.addEventListener('click', async (e) => {
-    await placeAllImages(
-      await getPictureList(e.target.id === 'button-mix'),
-      galleryElement
-    );
-  })
-);
+document.querySelector('#button-show').addEventListener('click', async (e) => {
+  await placeAllImages(await getPictureList(false), galleryElement);
+});
+
+document.querySelector('#button-mix').addEventListener('click', async (e) => {
+  const num = galleryElement.querySelectorAll('img').length;
+  shuffleRenderedImages(await advancedShuffle(num));
+});
