@@ -43,11 +43,12 @@ function advancedShuffle(range, logDetails) {
       }
     }
   };
-  //starts to smell like recursion...
-  const splitPoint = getRandomInt(0, range);
-  outputIndex.add(splitPoint);
-  fillSection(0, splitPoint, outputIndex);
-  fillSection(splitPoint + 1, range, outputIndex);
+  // //starts to smell like recursion...
+  // const splitPoint = getRandomInt(0, range);
+  // outputIndex.add(splitPoint);
+  // fillSection(0, splitPoint, outputIndex);
+  // fillSection(splitPoint + 1, range, outputIndex);
+  fillSection(0, range, outputIndex);
 
   if (logDetails) {
     console.log((' ' + totalCounter.toString()).padStart(18, '-'));
